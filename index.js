@@ -1,7 +1,7 @@
 const { select, input, checkbox } = require('@inquirer/prompts');
 
 let meta = {
-    value: ' Tomar 3 lts de água por dia',
+    value: 'Tomar 3 lts de água por dia',
     checked: false
 };
 
@@ -58,8 +58,24 @@ const metasRealizadas = async ()=> {
     }
 
     await select({
-        message: 'Metas Realizadas',
+        message: `Metas Realizadas (${realizadas.length})`,
         choices: [...realizadas]
+    })
+}
+
+const metasAbertas = async ()=> {
+    const abertas = metas.filter((meta)=> {
+        return meta.checked != true;
+    });
+
+    if (abertas.length == 0) {
+        console.log('Não existem metas em aberto');
+        return
+    }
+
+    await select({
+        message: `Metas Abertas (${abertas.length})`,
+        choices: [...abertas]
     })
 }
 
@@ -75,6 +91,10 @@ const start = async ()=> {
                 {
                     name: "Listar Metas",
                     value: "listar"
+                },
+                {
+                    name: "Metas Abertas",
+                    value: "abertas"
                 },
                 {
                     name: "Metas Realizadas",
@@ -95,8 +115,12 @@ const start = async ()=> {
             case "listar":
                 await listarMetas();
                 break
+            case "abertas":
+                await metasAbertas();
+                break
             case "realizadas":
                 await metasRealizadas();
+                break
             case "sair":
                 return
         };
