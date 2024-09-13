@@ -1,9 +1,11 @@
 const { select, input, checkbox } = require('@inquirer/prompts');
 
+let mensagem = 'Bem Vindo ao App';
+
 let meta = {
     value: 'Tomar 3 lts de água por dia',
     checked: false
-};
+}
 
 let metas = [ meta ];
 
@@ -18,7 +20,7 @@ const listarMetas = async ()=> {
     });
 
     if(respostas.length == 0){
-        console.log('Nenhuma meta selecionada');
+        mensagem = 'Nenhuma meta selecionada';
         return
     }
 
@@ -37,7 +39,7 @@ const cadastrarMeta = async ()=> {
     const meta = await input({ message: 'Digite a meta:'});
     
     if (meta.length == 0) {
-        console.log('Meta não pode ser vazia');
+        mensagem = 'Meta não pode ser vazia';
         return
     }
 
@@ -45,6 +47,8 @@ const cadastrarMeta = async ()=> {
         value: meta,
         checked: false
     })
+
+    mensagem = 'Meta cadastrada com sucesso';
 }
 
 const metasRealizadas = async ()=> {
@@ -53,7 +57,7 @@ const metasRealizadas = async ()=> {
     })
 
     if(realizadas.length == 0){
-        console.log('Sem metas realizadas');
+        mensagem = 'Sem metas realizadas';
         return
     }
 
@@ -69,7 +73,7 @@ const metasAbertas = async ()=> {
     });
 
     if (abertas.length == 0) {
-        console.log('Não existem metas em aberto');
+        mensagem = 'Não existem metas em aberto';
         return
     }
 
@@ -91,7 +95,7 @@ const deletarMetas = async ()=> {
     })
 
     if (itemsADeletar.length == 0) {
-        console.log('Nenhum item selecionado para deletar')
+        mensagem = 'Nenhum item selecionado para deletar';
         return
     }
 
@@ -102,10 +106,24 @@ const deletarMetas = async ()=> {
     })
 
     console.log('Metas deletadas com sucesso')
+
+    mensagem = 'Seleção deletada';
+}
+
+const mostrarMensagem = ()=> {
+    console.clear()
+
+    if (mensagem != "") {
+        console.log(mensagem);
+        console.log('')
+        mensagem = '';
+    }
 }
 
 const start = async ()=> {
     while(true){
+        mostrarMensagem();
+
         const opcao = await select({
             message: "Menu >",
             choices: [
